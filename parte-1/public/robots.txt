@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://positivus.vercel.app/sitemap.xml
