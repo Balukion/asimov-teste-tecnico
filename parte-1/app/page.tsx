@@ -7,7 +7,7 @@ import CaseStudies from "@/components/CaseStudies";
 
 export default function Home() {
   return (
-    <main className="max-w-[1440px] mx-auto">
+    <main className="max-w-[1440px] mx-auto pt-[60px]">
       <Header />
       <Hero />
       <Suspense fallback={null}>

@@ -1,6 +1,6 @@
 import clsx from "clsx";
 
-type ButtonVariant = "primary" | "outline";
+type ButtonVariant = "primary" | "outline" | "white";
 
 interface BaseProps {
   children: React.ReactNode;
@@ -26,12 +26,13 @@ const base =
 
 const variants: Record<ButtonVariant, string> = {
   primary: "bg-dark text-white hover:opacity-90",
-  outline: "border border-dark bg-transparent hover:bg-dark hover:text-white",
+  outline: "border border-dark bg-transparent text-black hover:bg-dark hover:text-white",
+  white: "bg-white text-dark hover:bg-white/90",
 };
 
 const sizes = {
   default: "text-[20px] py-5",
-  sm: "text-[18px] py-[18px]",
+  sm: "text-[20px] py-5",
 };
 
 export default function Button({

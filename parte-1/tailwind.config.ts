@@ -13,10 +13,11 @@ const config: Config = {
         gray: "#F3F3F3",
       },
       spacing: {
-        section: "60px",
-        "section-b": "136px",
+        section: "100px",
+        "section-b": "140px",
         "card-p": "50px",
         "panel-y": "70px",
+        "panel-x": "60px",
         "btn-x": "35px",
       },
       fontFamily: {

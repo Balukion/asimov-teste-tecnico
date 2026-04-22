@@ -46,7 +46,7 @@ export default function CaseStudies() {
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true, margin: "-60px" }}
         transition={{ duration: 0.7, ease }}
-        className="bg-dark rounded-card px-5 sm:px-8 md:px-section py-10 sm:py-14 md:py-panel-y"
+        className="bg-dark rounded-card px-5 sm:px-8 md:px-panel-x py-10 sm:py-14 md:py-panel-y"
       >
         <motion.div
           initial="hidden"
@@ -69,7 +69,7 @@ export default function CaseStudies() {
                 i === cases.length - 1 && "md:pr-0 pb-0",
               )}
             >
-              <p className="text-[18px] leading-[26px] text-white">{c.text}</p>
+              <p className="text-[18px] leading-[22.97px] text-white">{c.text}</p>
               <motion.a
                 href="#case-studies"
                 whileHover={{ x: 6 }}

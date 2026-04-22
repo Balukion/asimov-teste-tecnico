@@ -11,15 +11,17 @@ type Service = {
   badgeClass: "bg-green" | "bg-white";
   dark: boolean;
   img: string;
+  imgW: number;
+  imgH: number;
 };
 
 const services: Service[] = [
-  { title: "Search engine\noptimization", slug: "seo",          bgClass: "bg-gray",  badgeClass: "bg-green", dark: false, img: "/card-seo.png" },
-  { title: "Pay-per-click\nadvertising",  slug: "ppc",          bgClass: "bg-green", badgeClass: "bg-white", dark: false, img: "/card-ppc.png" },
-  { title: "Social Media\nMarketing",     slug: "social-media", bgClass: "bg-dark",  badgeClass: "bg-white", dark: true,  img: "/card-social.png" },
-  { title: "Email\nMarketing",            slug: "email",        bgClass: "bg-gray",  badgeClass: "bg-green", dark: false, img: "/card-email.png" },
-  { title: "Content\nCreation",           slug: "content",      bgClass: "bg-green", badgeClass: "bg-white", dark: false, img: "/card-content.png" },
-  { title: "Analytics and\nTracking",     slug: "analytics",    bgClass: "bg-dark",  badgeClass: "bg-white", dark: true,  img: "/card-analytics.png" },
+  { title: "Search engine\noptimization", slug: "seo",          bgClass: "bg-gray",  badgeClass: "bg-green", dark: false, img: "/card-seo.png",       imgW: 210, imgH: 170 },
+  { title: "Pay-per-click\nadvertising",  slug: "ppc",          bgClass: "bg-green", badgeClass: "bg-white", dark: false, img: "/card-ppc.png",       imgW: 210, imgH: 148 },
+  { title: "Social Media\nMarketing",     slug: "social-media", bgClass: "bg-dark",  badgeClass: "bg-white", dark: true,  img: "/card-social.png",    imgW: 210, imgH: 210 },
+  { title: "Email\nMarketing",            slug: "email",        bgClass: "bg-gray",  badgeClass: "bg-green", dark: false, img: "/card-email.png",     imgW: 210, imgH: 193 },
+  { title: "Content\nCreation",           slug: "content",      bgClass: "bg-green", badgeClass: "bg-white", dark: false, img: "/card-content.png",   imgW: 210, imgH: 196 },
+  { title: "Analytics and\nTracking",     slug: "analytics",    bgClass: "bg-dark",  badgeClass: "bg-white", dark: true,  img: "/card-analytics.png", imgW: 210, imgH: 170 },
 ];
 
 const cardVariants = {
@@ -114,11 +116,11 @@ export default function Services() {
                 src={service.img}
                 alt=""
                 aria-hidden="true"
-                width={210}
-                height={210}
-                quality={80}
+                width={service.imgW}
+                height={service.imgH}
+                quality={90}
                 sizes="210px"
-                style={{ width: "100%", height: "auto", maxWidth: "210px" }}
+                style={{ width: "100%", height: "auto", maxWidth: `${service.imgW}px` }}
                 className="object-contain"
               />
             </motion.div>
