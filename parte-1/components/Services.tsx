@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 type Service = {
   title: string;
@@ -17,6 +20,13 @@ const services: Service[] = [
   { title: "Content\nCreation",           slug: "content",      bgClass: "bg-green", badgeClass: "bg-white", dark: false, img: "/card-content.png" },
   { title: "Analytics and\nTracking",     slug: "analytics",    bgClass: "bg-dark",  badgeClass: "bg-white", dark: true,  img: "/card-analytics.png" },
 ];
+
+const ease = [0.22, 1, 0.36, 1] as const;
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 60 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease } },
+};
 
 function ArrowButton({ dark }: { dark: boolean }) {
   return (
@@ -39,7 +49,13 @@ export default function Services() {
   return (
     <section id="services" className="px-5 sm:px-8 md:px-section mb-section-b">
       {/* Section header */}
-      <div className="flex flex-col md:flex-row items-start md:items-center gap-6 mb-[80px]">
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.65, ease }}
+        className="flex flex-col md:flex-row items-start md:items-center gap-6 mb-[80px]"
+      >
         <h2 className="bg-green text-dark text-[32px] sm:text-[36px] md:text-[40px] font-medium rounded-[7px] px-[7px] leading-tight shrink-0">
           Services
         </h2>
@@ -47,15 +63,23 @@ export default function Services() {
           At our digital marketing agency, we offer a range of services to help
           businesses grow and succeed online. These services include:
         </p>
-      </div>
+      </motion.div>
 
       {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8 md:gap-[40px]">
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-60px" }}
+        variants={{ visible: { transition: { staggerChildren: 0.13 } } }}
+        className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8 md:gap-[40px]"
+      >
         {services.map((service) => (
-          <article
+          <motion.article
             key={service.slug}
             id={`service-${service.slug}`}
-            className={`flex flex-row rounded-card border border-dark shadow-card px-5 sm:px-8 md:px-card-p py-6 sm:py-8 md:py-card-p md:min-h-[310px] ${service.bgClass}`}
+            variants={cardVariants}
+            whileHover={{ y: -10, transition: { duration: 0.25 } }}
+            className={`flex flex-row rounded-card border border-dark shadow-card px-5 sm:px-8 md:px-card-p py-6 sm:py-8 md:py-card-p md:min-h-[310px] cursor-pointer ${service.bgClass}`}
           >
             {/* Left: title + link */}
             <div className="flex flex-col justify-between flex-[5]">
@@ -69,17 +93,23 @@ export default function Services() {
                 ))}
               </h3>
 
-              <a
+              <motion.a
                 href={`#service-${service.slug}`}
+                whileHover={{ x: 4 }}
+                transition={{ duration: 0.2 }}
                 className={`flex items-center gap-3 text-[20px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-dark rounded ${service.dark ? "text-white" : "text-dark"}`}
               >
                 <ArrowButton dark={service.dark} />
                 Learn more
-              </a>
+              </motion.a>
             </div>
 
-            {/* Right: illustration centered */}
-            <div className="flex-[5] flex items-center justify-center">
+            {/* Right: illustration */}
+            <motion.div
+              whileHover={{ rotate: 3, scale: 1.05 }}
+              transition={{ duration: 0.3 }}
+              className="flex-[5] flex items-center justify-center"
+            >
               <Image
                 src={service.img}
                 alt=""
@@ -91,10 +121,10 @@ export default function Services() {
                 style={{ width: "100%", height: "auto", maxWidth: "210px" }}
                 className="object-contain"
               />
-            </div>
-          </article>
+            </motion.div>
+          </motion.article>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }

@@ -1,5 +1,8 @@
+"use client";
+
 import clsx from "clsx";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 const cases = [
   {
@@ -16,11 +19,19 @@ const cases = [
   },
 ];
 
+const ease = [0.22, 1, 0.36, 1] as const;
+
 export default function CaseStudies() {
   return (
     <section id="case-studies" className="px-5 sm:px-8 md:px-section mb-section-b">
       {/* Section header */}
-      <div className="flex flex-col md:flex-row items-start md:items-center gap-6 mb-[80px]">
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.65, ease }}
+        className="flex flex-col md:flex-row items-start md:items-center gap-6 mb-[80px]"
+      >
         <h2 className="bg-green text-dark text-[32px] sm:text-[36px] md:text-[40px] font-medium rounded-[7px] px-[7px] leading-tight shrink-0">
           Case Studies
         </h2>
@@ -28,14 +39,30 @@ export default function CaseStudies() {
           Explore Real-Life Examples of Our Proven Digital Marketing Success
           through Our Case Studies
         </p>
-      </div>
+      </motion.div>
 
       {/* Panel */}
-      <div className="bg-dark rounded-card px-5 sm:px-8 md:px-section py-10 sm:py-14 md:py-panel-y">
-        <div className="flex flex-col md:flex-row gap-0">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.97 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.7, ease }}
+        className="bg-dark rounded-card px-5 sm:px-8 md:px-section py-10 sm:py-14 md:py-panel-y"
+      >
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
+          className="flex flex-col md:flex-row gap-0"
+        >
           {cases.map((c, i) => (
-            <div
+            <motion.div
               key={c.slug}
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease } },
+              }}
               className={clsx(
                 "flex-1 flex flex-col justify-between gap-5 py-6 sm:py-8 md:py-0 md:px-16",
                 i > 0 && "border-t md:border-t-0 md:border-l border-white/50",
@@ -44,8 +71,10 @@ export default function CaseStudies() {
               )}
             >
               <p className="text-[18px] leading-[26px] text-white">{c.text}</p>
-              <a
+              <motion.a
                 href="#case-studies"
+                whileHover={{ x: 6 }}
+                transition={{ duration: 0.2 }}
                 className="flex items-center gap-2 text-[20px] font-medium text-green hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green rounded"
               >
                 Learn more
@@ -56,11 +85,11 @@ export default function CaseStudies() {
                   width={21}
                   height={20}
                 />
-              </a>
-            </div>
+              </motion.a>
+            </motion.div>
           ))}
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Button from "./Button";
+import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
   { label: "About us",  href: "#" },
@@ -11,6 +12,8 @@ const navLinks = [
   { label: "Pricing",   href: "#" },
   { label: "Blog",      href: "#" },
 ];
+
+const ease = [0.22, 1, 0.36, 1] as const;
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -25,30 +28,48 @@ export default function Header() {
   }, [menuOpen]);
 
   return (
-    <header className="sticky top-0 z-50 w-full px-5 sm:px-6 md:px-section py-7 flex items-center justify-between bg-white">
-      <a
+    <motion.header
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease }}
+      className="sticky top-0 z-50 w-full px-5 sm:px-6 md:px-section py-7 flex items-center justify-between bg-white"
+    >
+      <motion.a
         href="#"
+        whileHover={{ scale: 1.04 }}
+        transition={{ duration: 0.2 }}
         className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-dark rounded"
       >
         <Image src="/Logo.svg" alt="Positivus" width={220} height={36} />
-      </a>
+      </motion.a>
 
       {/* Desktop nav */}
       <nav className="hidden md:flex items-center gap-10">
-        {navLinks.map((link) => (
-          <a
+        {navLinks.map((link, i) => (
+          <motion.a
             key={link.label}
             href={link.href}
-            className="text-[18px] text-dark hover:underline transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-dark rounded"
+            initial={{ opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.15 + i * 0.07, ease: "easeOut" }}
+            whileHover={{ y: -3 }}
+            className="text-[18px] text-dark hover:underline transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-dark rounded"
           >
             {link.label}
-          </a>
+          </motion.a>
         ))}
       </nav>
 
-      <Button variant="outline" size="sm" className="hidden md:inline-block">
-        Request a quote
-      </Button>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.85 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4, delay: 0.55, ease }}
+        className="hidden md:block"
+      >
+        <Button variant="outline" size="sm">
+          Request a quote
+        </Button>
+      </motion.div>
 
       {/* Mobile hamburger */}
       <button
@@ -64,26 +85,41 @@ export default function Header() {
       </button>
 
       {/* Mobile menu */}
-      {menuOpen && (
-        <div
-          id="mobile-menu"
-          className="absolute top-full left-0 w-full bg-white border-t border-dark/20 z-50 flex flex-col items-center gap-6 py-8 md:hidden shadow-md"
-        >
-          {navLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              onClick={() => setMenuOpen(false)}
-              className="text-[18px] text-dark hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-dark rounded"
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            id="mobile-menu"
+            initial={{ opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="absolute top-full left-0 w-full bg-white border-t border-dark/20 z-50 flex flex-col items-center gap-6 py-8 md:hidden shadow-md"
+          >
+            {navLinks.map((link, i) => (
+              <motion.a
+                key={link.label}
+                href={link.href}
+                onClick={() => setMenuOpen(false)}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.06, duration: 0.3, ease: "easeOut" }}
+                className="text-[18px] text-dark hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-dark rounded"
+              >
+                {link.label}
+              </motion.a>
+            ))}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.35 }}
             >
-              {link.label}
-            </a>
-          ))}
-          <Button variant="outline" size="sm">
-            Request a quote
-          </Button>
-        </div>
-      )}
-    </header>
+              <Button variant="outline" size="sm">
+                Request a quote
+              </Button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.header>
   );
 }
