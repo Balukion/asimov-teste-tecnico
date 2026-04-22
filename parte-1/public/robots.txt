@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://positivus.vercel.app/sitemap.xml
+Sitemap: https://asimov-teste-tecnico-pearl.vercel.app/sitemap.xml

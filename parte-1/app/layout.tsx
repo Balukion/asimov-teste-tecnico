@@ -10,7 +10,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 // Update with your actual deployment URL
-const SITE_URL = "https://positivus.vercel.app";
+const SITE_URL = "https://asimov-teste-tecnico-pearl.vercel.app";
 
 export const viewport: Viewport = {
   width: "device-width",
