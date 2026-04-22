@@ -25,7 +25,7 @@ export default function Header() {
   }, [menuOpen]);
 
   return (
-    <header className="sticky top-0 z-50 w-full px-5 sm:px-6 md:px-section py-7 flex items-center justify-between bg-white shadow-sm">
+    <header className="sticky top-0 z-50 w-full px-5 sm:px-6 md:px-section py-7 flex items-center justify-between bg-white">
       <a
         href="#"
         className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-dark rounded"
