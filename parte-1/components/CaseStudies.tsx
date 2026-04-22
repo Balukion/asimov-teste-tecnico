@@ -3,6 +3,7 @@
 import clsx from "clsx";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { ease } from "@/lib/motion";
 
 const cases = [
   {
@@ -18,8 +19,6 @@ const cases = [
     text: "For a national retail chain, we created a social media marketing campaign that increased followers by 25% and generated a 20% increase in online sales.",
   },
 ];
-
-const ease = [0.22, 1, 0.36, 1] as const;
 
 export default function CaseStudies() {
   return (
@@ -75,7 +74,8 @@ export default function CaseStudies() {
                 href="#case-studies"
                 whileHover={{ x: 6 }}
                 transition={{ duration: 0.2 }}
-                className="flex items-center gap-2 text-[20px] font-medium text-green hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green rounded"
+                className="flex items-center gap-2 text-[20px] font-medium text-green hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green rounded w-fit"
+                aria-label={`Learn more about the ${c.slug} case study`}
               >
                 Learn more
                 <Image

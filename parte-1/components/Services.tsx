@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { ease } from "@/lib/motion";
 
 type Service = {
   title: string;
@@ -20,8 +21,6 @@ const services: Service[] = [
   { title: "Content\nCreation",           slug: "content",      bgClass: "bg-green", badgeClass: "bg-white", dark: false, img: "/card-content.png" },
   { title: "Analytics and\nTracking",     slug: "analytics",    bgClass: "bg-dark",  badgeClass: "bg-white", dark: true,  img: "/card-analytics.png" },
 ];
-
-const ease = [0.22, 1, 0.36, 1] as const;
 
 const cardVariants = {
   hidden: { opacity: 0, y: 60 },
@@ -85,7 +84,7 @@ export default function Services() {
             <div className="flex flex-col justify-between flex-[5]">
               <h3 className="text-[22px] sm:text-[26px] md:text-[30px] font-medium leading-[1.20]">
                 {service.title.split("\n").map((line, j) => (
-                  <span key={line + j} className="block">
+                  <span key={j} className="block">
                     <span className={`px-[7px] rounded-[7px] text-dark ${service.badgeClass}`}>
                       {line}
                     </span>
@@ -98,6 +97,7 @@ export default function Services() {
                 whileHover={{ x: 4 }}
                 transition={{ duration: 0.2 }}
                 className={`flex items-center gap-3 text-[20px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-dark rounded ${service.dark ? "text-white" : "text-dark"}`}
+                aria-label={`Learn more about ${service.title.replace("\n", " ")}`}
               >
                 <ArrowButton dark={service.dark} />
                 Learn more

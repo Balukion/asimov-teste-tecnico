@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Button from "./Button";
 import { motion } from "framer-motion";
+import { ease } from "@/lib/motion";
 
 const logos = [
   { name: "Amazon",   src: "/logo-amazon.svg",   href: "https://amazon.com" },
@@ -12,8 +13,6 @@ const logos = [
   { name: "Netflix",  src: "/logo-netflix.svg",   href: "https://netflix.com" },
   { name: "Zoom",     src: "/logo-zoom.svg",      href: "https://zoom.us" },
 ];
-
-const ease = [0.22, 1, 0.36, 1] as const;
 
 export default function Hero() {
   return (
@@ -84,6 +83,7 @@ export default function Hero() {
         viewport={{ once: true, margin: "-60px" }}
         variants={{ visible: { transition: { staggerChildren: 0.09 } } }}
         className="mt-panel-y py-10 flex flex-wrap justify-between items-center gap-8"
+        aria-label="Our clients"
       >
         {logos.map((logo) => (
           <motion.a
@@ -95,7 +95,7 @@ export default function Hero() {
               hidden: { opacity: 0, y: 24 },
               visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease } },
             }}
-            whileHover={{ scale: 1.12, filter: "grayscale(0%)" }}
+            whileHover={{ scale: 1.12 }}
             className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-dark rounded"
           >
             <Image
@@ -104,7 +104,7 @@ export default function Hero() {
               width={130}
               height={48}
               sizes="130px"
-              className="h-8 w-auto object-contain grayscale transition-all duration-300 hover:grayscale-0"
+              className="h-8 w-auto object-contain grayscale transition-[filter] duration-300 hover:grayscale-0"
             />
           </motion.a>
         ))}

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Button from "./Button";
 import { motion, AnimatePresence } from "framer-motion";
+import { ease } from "@/lib/motion";
 
 const navLinks = [
   { label: "About us",  href: "#" },
@@ -12,8 +13,6 @@ const navLinks = [
   { label: "Pricing",   href: "#" },
   { label: "Blog",      href: "#" },
 ];
-
-const ease = [0.22, 1, 0.36, 1] as const;
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -44,7 +43,7 @@ export default function Header() {
       </motion.a>
 
       {/* Desktop nav */}
-      <nav className="hidden md:flex items-center gap-10">
+      <nav className="hidden md:flex items-center gap-10" aria-label="Main navigation">
         {navLinks.map((link, i) => (
           <motion.a
             key={link.label}
@@ -75,7 +74,7 @@ export default function Header() {
       <button
         className="md:hidden flex flex-col gap-1.5 p-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-dark rounded"
         onClick={() => setMenuOpen(!menuOpen)}
-        aria-label="Toggle menu"
+        aria-label={menuOpen ? "Close menu" : "Open menu"}
         aria-expanded={menuOpen}
         aria-controls="mobile-menu"
       >
@@ -89,6 +88,8 @@ export default function Header() {
         {menuOpen && (
           <motion.div
             id="mobile-menu"
+            role="navigation"
+            aria-label="Mobile navigation"
             initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}

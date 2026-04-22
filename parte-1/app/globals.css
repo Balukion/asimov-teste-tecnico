@@ -10,6 +10,22 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Lenis overrides native scroll-behavior — keep it only as fallback */
+html.lenis {
+  scroll-behavior: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 body {
   @apply text-dark bg-white;
 }
