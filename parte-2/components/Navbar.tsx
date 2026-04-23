@@ -1,6 +1,35 @@
+'use client'
+
+import { useEffect, useRef, useState } from 'react'
+
+const navItems = [
+  ['Formações', '#formacoes'],
+  ['Trilhas', '#trilhas'],
+  ['Cursos', '#cursos'],
+  ['Projetos', '#projetos'],
+] as const
+
 export default function Navbar() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const buttonRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    if (!isMenuOpen) return
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setIsMenuOpen(false)
+        buttonRef.current?.focus()
+      }
+    }
+
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [isMenuOpen])
+
   return (
     <nav
+      aria-label="Navegação principal"
       className="nav-wrap"
       style={{
         position: 'fixed',
@@ -19,7 +48,8 @@ export default function Navbar() {
       }}
     >
       <a
-        href="#"
+        href="#hero"
+        className="focus-ring"
         style={{
           fontFamily: 'var(--font-jetbrains-mono), JetBrains Mono, monospace',
           fontSize: '18px',
@@ -39,11 +69,11 @@ export default function Navbar() {
           listStyle: 'none',
         }}
       >
-        {['Formações', 'Trilhas', 'Cursos', 'Projetos'].map((item) => (
+        {navItems.map(([item, href]) => (
           <li key={item}>
             <a
-              href="#"
-              className="nav-link"
+              href={href}
+              className="nav-link focus-ring"
               style={{
                 fontSize: '14px',
                 color: 'var(--muted)',
@@ -57,23 +87,23 @@ export default function Navbar() {
         ))}
       </ul>
 
-      <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-        <button
-          className="btn-ghost"
+      <div className="nav-actions" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+        <a
+          href="https://asimov.academy"
+          className="btn-ghost focus-ring"
           style={{
             fontFamily: 'inherit',
             fontSize: '14px',
             color: 'var(--muted)',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
+            textDecoration: 'none',
             transition: 'color .2s',
           }}
         >
           Entrar
-        </button>
-        <button
-          className="btn-nav"
+        </a>
+        <a
+          href="https://asimov.academy"
+          className="btn-nav focus-ring"
           style={{
             fontFamily: 'inherit',
             fontSize: '14px',
@@ -82,12 +112,59 @@ export default function Navbar() {
             border: '1px solid var(--border)',
             borderRadius: '8px',
             padding: '8px 16px',
-            cursor: 'pointer',
+            textDecoration: 'none',
             transition: 'border-color .2s, background .2s',
           }}
         >
           Matricule-se
-        </button>
+        </a>
+      </div>
+
+      <button
+        ref={buttonRef}
+        type="button"
+        className="nav-menu-button focus-ring"
+        aria-label={isMenuOpen ? 'Fechar menu de navegação' : 'Abrir menu de navegação'}
+        aria-expanded={isMenuOpen}
+        aria-controls="mobile-navigation"
+        onClick={() => setIsMenuOpen((value) => !value)}
+      >
+        <span aria-hidden="true" />
+        <span aria-hidden="true" />
+        <span aria-hidden="true" />
+      </button>
+
+      <div
+        id="mobile-navigation"
+        className={`mobile-menu ${isMenuOpen ? 'is-open' : ''}`}
+        hidden={!isMenuOpen}
+      >
+        {navItems.map(([item, href]) => (
+          <a
+            key={item}
+            href={href}
+            className="focus-ring"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            {item}
+          </a>
+        ))}
+        <div className="mobile-menu-actions">
+          <a
+            href="https://asimov.academy"
+            className="focus-ring"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Entrar
+          </a>
+          <a
+            href="https://asimov.academy"
+            className="focus-ring"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Matricule-se
+          </a>
+        </div>
       </div>
     </nav>
   )
