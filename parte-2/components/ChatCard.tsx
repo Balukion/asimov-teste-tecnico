@@ -23,10 +23,22 @@ export default function ChatCard() {
   useEffect(() => {
     const root = rootRef.current
     if (!root) return
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    if (prefersReducedMotion) {
+      ALL_IDS.forEach((id) => {
+        if (!id.startsWith('typing')) {
+          root.querySelector(`[data-cid="${id}"]`)?.classList.add('visible')
+        }
+      })
+      return
+    }
 
     const timeouts: ReturnType<typeof setTimeout>[] = []
+    let interval: ReturnType<typeof setInterval> | undefined
 
     function runChat() {
+      timeouts.splice(0).forEach(clearTimeout)
       ALL_IDS.forEach((id) => root?.querySelector(`[data-cid="${id}"]`)?.classList.remove('visible'))
 
       let t = 0
@@ -42,17 +54,19 @@ export default function ChatCard() {
     }
 
     runChat()
-    const interval = setInterval(runChat, 18000)
+    interval = setInterval(runChat, 18000)
 
     return () => {
-      timeouts.forEach(clearTimeout)
-      clearInterval(interval)
+      timeouts.splice(0).forEach(clearTimeout)
+      if (interval) clearInterval(interval)
     }
   }, [])
 
   return (
     <div
       ref={rootRef}
+      className="chat-card"
+      aria-label="Exemplo de conversa com a assistente Asimov AI"
       style={{
         width: '100%',
         maxWidth: '380px',

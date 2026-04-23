@@ -44,6 +44,7 @@ export default function HeroSection() {
 
     const pCtx = pCanvas.getContext('2d')!
     const oCtx = oCanvas.getContext('2d')!
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     let pW = 0, pH = 0
     let oW = 0, oH = 0
@@ -55,6 +56,40 @@ export default function HeroSection() {
     const isMobile = window.innerWidth < 768
     const FRAME_MS = 1000 / (isMobile ? 30 : 60)
     let lastFrame  = 0
+    let isRunning = false
+
+    if (prefersReducedMotion) {
+      const particleCanvas = pCanvas
+      const orbCanvas = oCanvas
+
+      function drawStaticScene() {
+        pW = particleCanvas.width = particleCanvas.offsetWidth
+        pH = particleCanvas.height = particleCanvas.offsetHeight
+        oW = orbCanvas.width = orbCanvas.offsetWidth
+        oH = orbCanvas.height = orbCanvas.offsetHeight
+
+        pCtx.clearRect(0, 0, pW, pH)
+        oCtx.clearRect(0, 0, oW, oH)
+
+        const cx = oW / 2
+        const cy = oH - ORB_SIZE * 0.25
+        const gradient = oCtx.createRadialGradient(cx, cy, 0, cx, cy, ORB_SIZE)
+        gradient.addColorStop(0, 'rgba(0,229,160,0.18)')
+        gradient.addColorStop(0.55, 'rgba(139,92,246,0.12)')
+        gradient.addColorStop(1, 'rgba(7,8,15,0)')
+        oCtx.fillStyle = gradient
+        oCtx.beginPath()
+        oCtx.arc(cx, cy, ORB_SIZE, 0, Math.PI * 2)
+        oCtx.fill()
+      }
+
+      const staticObserver = new ResizeObserver(drawStaticScene)
+      staticObserver.observe(particleCanvas)
+      staticObserver.observe(orbCanvas)
+      drawStaticScene()
+
+      return () => staticObserver.disconnect()
+    }
 
     // ── Mouse tracking ──
     const onMouseMove = (e: MouseEvent) => { mouse.current.x = e.clientX; mouse.current.y = e.clientY }
@@ -92,6 +127,7 @@ export default function HeroSection() {
     }
 
     function drawParticles(ts = 0) {
+      if (!isRunning) return
       pRafId = requestAnimationFrame(drawParticles)
       if (ts - lastFrame < FRAME_MS) return
       lastFrame = ts
@@ -199,10 +235,10 @@ export default function HeroSection() {
     const pObs = new ResizeObserver(resizeP)
     pObs.observe(pCanvas)
     resizeP()
-    pRafId = requestAnimationFrame(drawParticles)
 
     // ── Rotating orb ───────────────────────────────────────────────────────────
     function drawOrb() {
+      if (!isRunning) return
       oRafId = requestAnimationFrame(drawOrb)
       oCtx.clearRect(0, 0, oW, oH)
 
@@ -277,12 +313,32 @@ export default function HeroSection() {
     const oObs = new ResizeObserver(resizeO)
     oObs.observe(oCanvas)
     resizeO()
-    oRafId = requestAnimationFrame(drawOrb)
+
+    function startAnimations() {
+      if (isRunning || document.hidden) return
+      isRunning = true
+      pRafId = requestAnimationFrame(drawParticles)
+      oRafId = requestAnimationFrame(drawOrb)
+    }
+
+    function stopAnimations() {
+      isRunning = false
+      cancelAnimationFrame(pRafId)
+      cancelAnimationFrame(oRafId)
+    }
+
+    function onVisibilityChange() {
+      if (document.hidden) stopAnimations()
+      else startAnimations()
+    }
+
+    document.addEventListener('visibilitychange', onVisibilityChange)
+    startAnimations()
 
     return () => {
       window.removeEventListener('mousemove', onMouseMove)
-      cancelAnimationFrame(pRafId)
-      cancelAnimationFrame(oRafId)
+      document.removeEventListener('visibilitychange', onVisibilityChange)
+      stopAnimations()
       pObs.disconnect()
       oObs.disconnect()
     }
@@ -291,6 +347,9 @@ export default function HeroSection() {
   // ── Render ──────────────────────────────────────────────────────────────────
   return (
     <section
+      id="hero"
+      aria-labelledby="hero-title"
+      className="hero-section"
       style={{
         position: 'relative',
         height: '100vh',
@@ -303,12 +362,14 @@ export default function HeroSection() {
       {/* Layer 1 — aurora particles */}
       <canvas
         ref={pCanvasRef}
+        aria-hidden="true"
         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}
       />
 
       {/* Layer 2 — rotating orb */}
       <canvas
         ref={oCanvasRef}
+        aria-hidden="true"
         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 2 }}
       />
 
@@ -340,6 +401,7 @@ export default function HeroSection() {
       >
         {/* Left column — copy */}
         <div
+          className="hero-copy"
           style={{
             display: 'flex',
             flexDirection: 'column',
@@ -367,12 +429,13 @@ export default function HeroSection() {
               letterSpacing: '.01em',
             }}
           >
-            <div className="badge-dot" />
+            <div className="badge-dot" aria-hidden="true" />
             Python + IA · Curso mais prático do Brasil
           </div>
 
           {/* Headline */}
           <h1
+            id="hero-title"
             style={{
               fontSize: 'clamp(30px, 3.6vw, 54px)',
               fontWeight: 700,
@@ -412,9 +475,9 @@ export default function HeroSection() {
           </p>
 
           {/* Bullets */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '13px' }}>
+          <ul style={{ display: 'flex', flexDirection: 'column', gap: '13px', listStyle: 'none' }}>
             {BULLETS.map((text) => (
-              <div
+              <li
                 key={text}
                 style={{
                   display: 'flex',
@@ -426,6 +489,7 @@ export default function HeroSection() {
                 }}
               >
                 <div
+                  aria-hidden="true"
                   style={{
                     width: 20,
                     height: 20,
@@ -438,7 +502,7 @@ export default function HeroSection() {
                     justifyContent: 'center',
                   }}
                 >
-                  <svg viewBox="0 0 11 11" fill="none" width={10} height={10}>
+                  <svg viewBox="0 0 11 11" fill="none" width={10} height={10} aria-hidden="true" focusable="false">
                     <polyline
                       points="2,6 4.5,8.5 9,3"
                       stroke="var(--cyan)"
@@ -449,9 +513,9 @@ export default function HeroSection() {
                   </svg>
                 </div>
                 {text}
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
 
         {/* Right column — chat mock */}
@@ -465,6 +529,7 @@ export default function HeroSection() {
 
       {/* Layer 5 — CTAs over the orb */}
       <div
+        className="hero-ctas"
         style={{
           position: 'absolute',
           left: '50%',
@@ -478,8 +543,9 @@ export default function HeroSection() {
           whiteSpace: 'nowrap',
         }}
       >
-        <button
-          className="btn-primary"
+        <a
+          href="https://asimov.academy"
+          className="btn-primary focus-ring"
           style={{
             fontFamily: 'inherit',
             fontSize: '15px',
@@ -489,15 +555,16 @@ export default function HeroSection() {
             border: 'none',
             borderRadius: '10px',
             padding: '14px 28px',
-            cursor: 'pointer',
+            textDecoration: 'none',
             transition: 'transform .15s, box-shadow .2s',
             boxShadow: '0 0 28px rgba(0,229,160,.4)',
           }}
         >
           Quero começar agora
-        </button>
-        <button
-          className="btn-secondary"
+        </a>
+        <a
+          href="#cursos"
+          className="btn-secondary focus-ring"
           style={{
             fontFamily: 'inherit',
             fontSize: '15px',
@@ -507,13 +574,13 @@ export default function HeroSection() {
             border: '1px solid var(--border)',
             borderRadius: '10px',
             padding: '14px 28px',
-            cursor: 'pointer',
+            textDecoration: 'none',
             backdropFilter: 'blur(8px)',
             transition: 'background .2s, border-color .2s',
           }}
         >
           Ver o que vou aprender →
-        </button>
+        </a>
       </div>
     </section>
   )
