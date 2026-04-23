@@ -178,10 +178,10 @@ export default function ChatCard() {
           <InputPill label="módulo-3" />
         </div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontFamily: 'var(--font-space-grotesk), Space Grotesk, sans-serif', fontSize: '12px', color: '#3a3f5c' }}>
+          <span style={{ fontFamily: 'var(--font-space-grotesk), Space Grotesk, sans-serif', fontSize: '12px', color: '#8b94bd' }}>
             Ask followup…
           </span>
-          <span style={{ fontSize: '10px', color: '#2e3350' }}>↵ enviar</span>
+          <span style={{ fontSize: '10px', color: '#818bb3' }}>↵ enviar</span>
         </div>
       </div>
     </div>
@@ -303,7 +303,7 @@ function CodeBlock() {
       <span style={{ color: '#ff79c6' }}>import</span>{' '}
       <span style={{ color: '#8be9fd' }}>requests</span>
       <br />
-      <span style={{ color: '#44475a' }}># requisição GET</span>
+      <span style={{ color: '#7f8aaa' }}># requisição GET</span>
       <br />
       {'r = requests.'}
       <span style={{ color: '#50fa7b' }}>get</span>
