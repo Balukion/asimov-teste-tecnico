@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #07080f;
+  --bg2: #0e1020;
+  --bg3: #141628;
+  --cyan: #00e5a0;
+  --cyan-rgb: 0, 229, 160;
+  --violet: #8b5cf6;
+  --violet-rgb: 139, 92, 246;
+  --white: #ffffff;
+  --muted: #9ba3c8;
+  --border: #1e2340;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background: var(--bg);
+  color: white;
+  overflow-x: hidden;
+}
+
+/* ── Badge pulse ── */
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cyan);
+  animation: pulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.8); }
+}
+
+/* ── Chat animations ── */
+.chat-msg {
+  opacity: 0;
+  transform: translateY(5px);
+  transition: opacity 0.4s ease, transform 0.35s ease;
+}
+.chat-msg.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ctx-pill {
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.ctx-pill.visible {
+  opacity: 1;
+}
+
+.chat-typing {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.chat-typing.visible {
+  opacity: 1;
+}
+
+.typing-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--cyan);
+  animation: tdot 1.2s ease-in-out infinite;
+  display: block;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes tdot {
+  0%, 60%, 100% { opacity: 0.2; transform: scale(0.8); }
+  30%           { opacity: 1;   transform: scale(1);   }
+}
+
+/* ── Navbar link hover ── */
+.nav-link:hover { color: white; }
+
+/* ── Button hovers ── */
+.btn-ghost:hover { color: white; }
+.btn-nav:hover {
+  border-color: rgba(0, 229, 160, 0.4) !important;
+  background: rgba(0, 229, 160, 0.07) !important;
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 48px rgba(0, 229, 160, 0.6) !important;
+}
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.10) !important;
+  border-color: #2e3560 !important;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .nav-links { display: none !important; }
+  .nav-wrap  { padding: 0 20px !important; }
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+    padding: 40px 24px 0 !important;
+  }
+  .hero-right { justify-content: center !important; }
+}

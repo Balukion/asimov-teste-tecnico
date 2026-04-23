@@ -1,0 +1,22 @@
+# Design handoff (protótipos de referência, não são código de produção)
+parte-2/design_handoff_hero_asimov/
+
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# Build output
+dist/
+build/
+
+# Environment
+.env
+.env.local
+.env*.local
+
+# Misc
+.DS_Store
+*.log
